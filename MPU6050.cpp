@@ -2,7 +2,7 @@
 int Gscale = GFS_2000DPS;
 int Ascale = AFS_8G;
 
-float MPU6050lib::getGres() {
+float MPU6050::getGres() {
   switch (Gscale) {
   // Possible gyro scales (and their register bit settings) are:
   // 250 DPS (00), 500 DPS (01), 1000 DPS (10), and 2000 DPS  (11).
@@ -23,7 +23,7 @@ float MPU6050lib::getGres() {
   }
 }
 
-float MPU6050lib::getAres() {
+float MPU6050::getAres() {
   switch (Ascale) {
   // Possible accelerometer scales (and their register bit settings) are:
   // 2 Gs (00), 4 Gs (01), 8 Gs (10), and 16 Gs  (11).
@@ -44,7 +44,7 @@ float MPU6050lib::getAres() {
   }
 }
 
-void MPU6050lib::readAccelData(int16_t *destination) {
+void MPU6050::readAccelData(int16_t *destination) {
   uint8_t rawData[6]; // x/y/z accel register data stored here
   readBytes(MPU6050_ADDRESS, ACCEL_XOUT_H, 6,
             &rawData[0]); // Read the six raw data registers into data array
@@ -55,7 +55,7 @@ void MPU6050lib::readAccelData(int16_t *destination) {
   destination[2] = (int16_t)((rawData[4] << 8) | rawData[5]);
 }
 
-void MPU6050lib::readGyroData(int16_t *destination) {
+void MPU6050::readGyroData(int16_t *destination) {
   uint8_t rawData[6]; // x/y/z gyro register data stored here
   readBytes(MPU6050_ADDRESS, GYRO_XOUT_H, 6,
             &rawData[0]); // Read the six raw data registers sequentially into
@@ -67,7 +67,7 @@ void MPU6050lib::readGyroData(int16_t *destination) {
   destination[2] = (int16_t)((rawData[4] << 8) | rawData[5]);
 }
 
-int16_t MPU6050lib::readTempData() {
+int16_t MPU6050::readTempData() {
   uint8_t rawData[2]; // x/y/z gyro register data stored here
   readBytes(MPU6050_ADDRESS, TEMP_OUT_H, 2,
             &rawData[0]); // Read the two raw data registers sequentially into
@@ -76,7 +76,7 @@ int16_t MPU6050lib::readTempData() {
          rawData[1]; // Turn the MSB and LSB into a 16-bit value
 }
 
-void MPU6050lib::initMPU6050() {
+void MPU6050::initMPU6050() {
   // wake up device-don't need this here if using calibration function below
   // Configure the MPU-6050
   delay(100);
@@ -98,7 +98,7 @@ void MPU6050lib::initMPU6050() {
 
   // Set DLPF to 94 Hz
   writeByte(MPU6050_ADDRESS, CONFIG, 0x02);
-  
+
   // Set DLPF to Default 260 Hz
   // writeByte(MPU6050_ADDRESS,CONFIG,0x00);
 
@@ -109,14 +109,14 @@ void MPU6050lib::initMPU6050() {
   writeByte(MPU6050_ADDRESS, ACCEL_CONFIG, 0x16);
 }
 
-void MPU6050lib::writeByte(uint8_t address, uint8_t subAddress, uint8_t data) {
+void MPU6050::writeByte(uint8_t address, uint8_t subAddress, uint8_t data) {
   Wire.beginTransmission(address); // Initialize the Tx buffer
   Wire.write(subAddress);          // Put slave register address in Tx buffer
   Wire.write(data);                // Put data in Tx buffer
   Wire.endTransmission();          // Send the Tx buffer
 }
 
-uint8_t MPU6050lib::readByte(uint8_t address, uint8_t subAddress) {
+uint8_t MPU6050::readByte(uint8_t address, uint8_t subAddress) {
   uint8_t data;                    // `data` will store the register data
   Wire.beginTransmission(address); // Initialize the Tx buffer
   Wire.write(subAddress);          // Put slave register address in Tx buffer
@@ -128,8 +128,8 @@ uint8_t MPU6050lib::readByte(uint8_t address, uint8_t subAddress) {
   return data;                  // Return data read from slave register
 }
 
-void MPU6050lib::readBytes(uint8_t address, uint8_t subAddress, uint8_t count,
-                           uint8_t *dest) {
+void MPU6050::readBytes(uint8_t address, uint8_t subAddress, uint8_t count,
+                        uint8_t *dest) {
   Wire.beginTransmission(address); // Initialize the Tx buffer
   Wire.write(subAddress);          // Put slave register address in Tx buffer
   Wire.endTransmission(

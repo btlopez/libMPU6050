@@ -136,7 +136,7 @@ enum Gscale { GFS_250DPS = 0, GFS_500DPS, GFS_1000DPS, GFS_2000DPS };
 #define FIFO_R_W 0x74
 #define WHO_AM_I_MPU6050 0x75 // Should return 0x68
 
-class MPU6050lib {
+class MPU6050 {
 public:
   float getGres();
   float getAres();
